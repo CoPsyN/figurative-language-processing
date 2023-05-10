@@ -1,4 +1,4 @@
-# The Model Behavior of Large Language Models in Figurative Language Processing
+# The Behavior of Large Language Models in Figurative Language Processing
 
 ## 1. About
 
