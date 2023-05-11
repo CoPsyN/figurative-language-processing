@@ -5,7 +5,7 @@
 This repository contains all source code and data for the following (forthcoming) paper: 
 
 Hyewon Jang<sup><b>&#8224;</b></sup>, Qi Yu<sup><b>&#8224;</b></sup> and Diego Frassinelli. 
-The Inner Workings of Language Models in Figurative Language Processing: Linguistically Informed Feature Analyses of Model Behavior.
+Linguistically-Informed Feature Analyses of Language Model Behavior in Figurative Language Processing. *Findings of the Association for Computational Linguistics: ACL 2023*.
 
 <sup><b>&#8224;</b></sup> Authors with equal contribution, listed alphabetically.
 
