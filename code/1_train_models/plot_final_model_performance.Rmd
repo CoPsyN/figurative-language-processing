@@ -1,0 +1,105 @@
+---
+title: "final_model_performance"
+author: "Qi Yu"
+date: "2023-01-11"
+output: html_document
+---
+
+```{r}
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+library(viridis)
+library(ggsci)
+```
+
+```{r}
+df_bert <- read.csv("../results/classification_results/classification_report_testset_bert-base-uncased.tsv", sep = "\t", header = TRUE) %>% 
+  mutate_if(is.character, as.numeric)
+
+df_roberta <- read.csv("../results/classification_results/classification_report_testset_roberta-base.tsv", sep = "\t", header = TRUE) %>% 
+  mutate_if(is.character, as.numeric)
+
+df_xlnet <- read.csv("../results/classification_results/classification_report_testset_xlnet-base-cased.tsv", sep = "\t", header = TRUE) %>% 
+  mutate_if(is.character, as.numeric)
+
+df_lr <- read.csv("../results/classification_results/classification_report_testset_lr.tsv", sep = "\t", header = TRUE) %>% 
+  mutate_if(is.character, as.numeric)
+
+df_rf <- read.csv("../results/classification_results/classification_report_testset_rf.tsv", sep = "\t", header = TRUE) %>% 
+  mutate_if(is.character, as.numeric)
+
+df_bert <- df_bert[1:4, ]
+df_roberta <- df_roberta[1:4, ]
+df_xlnet <- df_xlnet[1:4, ]
+df_lr <- df_lr[1:4, ]
+df_rf <- df_rf[1:4, ]
+
+# Change the class labels for the black-box models from {0, 1, 2, 3} to {1, 2, 3, 4} 
+df_bert$X <- df_bert$X + 1
+df_roberta$X <- df_roberta$X + 1
+df_xlnet$X <- df_xlnet$X + 1
+
+df_bert
+df_roberta
+df_xlnet
+df_lr
+df_rf
+```
+
+
+```{r}
+df <- rbind(df_bert, df_roberta, df_xlnet, df_lr, df_rf) %>% 
+  mutate(X = case_when(X == 1 ~ "sarcasm",
+                       X == 2 ~ "idiom",
+                       X == 3 ~ "simile",
+                       X == 4 ~ "metaphor"))
+
+df$model <- rep(c("BERT", "RoBERTa", "XLNet", "LR", "RF"), each = 4) 
+
+df <- df %>% 
+  mutate_if(is.character, as.factor) %>% 
+  mutate(
+    model = fct_relevel(model, "BERT", "RoBERTa", "XLNet", "LR", "RF"),
+    X = fct_relevel(X, "sarcasm", "simile", "idiom", "metaphor")
+  )
+
+colnames(df)[1] <- "class"
+colnames(df)[4] <- "F1"
+
+
+
+df
+```
+
+```{r}
+p <- ggplot(df, aes(x=class, y=F1, color=model, group=model)) +
+  geom_line(linetype = "dashed", linewidth=0.5) +
+  geom_point(aes(shape=model), size=2) +
+  xlab("Class") + 
+  ylab("F1") + 
+  scale_color_brewer(palette="Dark2") +
+  theme_bw() +
+  scale_fill_discrete(name="Model: ") + 
+  theme(legend.position = "bottom",
+        text = element_text(size = 21)
+        ) #+
+  #guides(fill = guide_legend(nrow = 1, title="Model: "))
+
+p
+```
+```{r}
+ggsave(
+  "../results/classification_results/per_class_f1.pdf",
+  plot = p,
+  width = 10, height = 7,
+  dpi = 300)
+```
+
+
+
+
+
+
+
+
