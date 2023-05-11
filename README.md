@@ -1,4 +1,4 @@
-# The Behavior of Large Language Models in Figurative Language Processing
+# Linguistically-Informed Feature Analyses of Language Model Behavior in Figurative Language Processing
 
 ## 1. About
 
