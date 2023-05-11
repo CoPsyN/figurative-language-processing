@@ -1,0 +1,84 @@
+---
+title: "shap_liwc_mapping"
+author: "Qi Yu"
+date: "2023-01-11"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(dplyr)
+library(tidyr)
+library(ggplot2)
+library(ggsci)
+library(RColorBrewer)
+```
+
+# 1. Method 1: Select top 3 most prevalent features
+
+
+["pronoun", "article", "prep", "auxverb", "conj", "negate", "interrog", "quant"] 
+categ_to_use_content = ["verb", "adj", "adverb", "compare"]
+categ_to_use_sentiment = ["posemo", "negemo"]
+
+```{r}
+function_categ <-  c('article', 'auxverb', 'conj', 'interrog', 'negate', 'prep', 'pronoun', "quant")
+content_categ <-  c('adj', 'adverb', 'verb', 'compare')
+sentiment_categ <- c('negemo', 'posemo')
+
+all_categ = c(function_categ, content_categ, sentiment_categ)
+all_categ
+```
+
+
+```{r}
+df <- read.csv("../results/liwc_mapping/liwc_mapping_aggregated_statistics.tsv", sep = "\t", header = TRUE) %>% 
+  mutate_if(is.character, as.factor) %>% 
+  mutate(
+    object = fct_relevel(object, "BERT", "RoBERTa", "XLNet", "LR", "RF", "Human"),
+    LIWC_category = fct_relevel(LIWC_category, all_categ),
+    figurative_language_class = fct_relevel(figurative_language_class, "sarcasm", "simile", "idiom", "metaphor")
+  )
+
+df
+```
+
+**Get color HEX codes: The library RColorBrewer is used**
+
+```{r}
+brewer.pal(n=9, name="Blues")
+brewer.pal(n=9, name="Reds")
+brewer.pal(n=9, name="Greens")
+```
+
+
+```{r}
+p <- ggplot(df, aes(x = object, y = count, fill = object)) + 
+  geom_bar(stat = "identity", position = "dodge") +
+  facet_grid(figurative_language_class ~ LIWC_category) +
+  #ylim(0, 20) + 
+  xlab("Sources (Models & Humans)") + 
+  ylab("Count") + 
+  #scale_fill_jco() +
+  scale_fill_manual(values=c("#006D2C",
+                             "#41AB5D",
+                             "#A1D99B",
+                             "#2171B5",
+                             "#C6DBEF",
+                             "#A50F15")) + 
+  theme_bw() + 
+  scale_x_discrete(guide=guide_axis(angle=90)) +
+  theme(legend.position = "bottom",
+        text = element_text(size = 21),
+        #axis.title.x=element_blank(),
+        axis.text.x=element_blank(),
+        axis.ticks.x=element_blank()
+      ) + 
+  guides(fill = guide_legend(nrow = 1, title="Source: "))
+
+ggsave(
+  "../results/liwc_mapping/liwc_mapping_plot.pdf",
+  plot = p,
+  width = 16, height = 6.5,
+  dpi = 300)
+```
