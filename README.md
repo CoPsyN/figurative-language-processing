@@ -29,4 +29,19 @@ See the following table for an overview of the content in each subfolder:
 | ```results```            | All results.<br/>NOTE: As the file size of the classification models and the SHAP explainers are large and it took an unexpected long time to upload them to Github, we share them in .zip format via [Google Drive](https://drive.google.com/drive/folders/105u_2vBZA7CCWj3BCWVXLSederPpfld9?usp=sharing). |
 
 ## 3. Cite the paper
-Official Bibtex coming soon.
+```
+@inproceedings{jang-etal-2023-figurative,
+    title = "Figurative Language Processing: A Linguistically Informed Feature Analysis of the Behavior of Language Models and Humans",
+    author = "Jang, Hyewon  and
+      Yu, Qi  and
+      Frassinelli, Diego",
+    booktitle = "Findings of the Association for Computational Linguistics: ACL 2023",
+    month = jul,
+    year = "2023",
+    address = "Toronto, Canada",
+    publisher = "Association for Computational Linguistics",
+    url = "https://aclanthology.org/2023.findings-acl.622",
+    doi = "10.18653/v1/2023.findings-acl.622",
+    pages = "9816--9832"
+}
+```
