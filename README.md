@@ -2,7 +2,7 @@
 
 ## 1. About
 
-This repository contains all source code and data for the following (forthcoming) paper: 
+This repository contains all source code and data for the following paper: 
 
 Hyewon Jang<sup><b>&#8224;</b></sup>, Qi Yu<sup><b>&#8224;</b></sup> and Diego Frassinelli. 
 Linguistically-Informed Feature Analyses of Language Model Behavior in Figurative Language Processing. *Findings of the Association for Computational Linguistics: ACL 2023*.
